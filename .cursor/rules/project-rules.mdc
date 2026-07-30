@@ -1,0 +1,15 @@
+---
+description: Project engineering rules — invariants + pointer to docs/rules.md
+alwaysApply: true
+---
+
+# Project rules (always apply)
+
+Follow project invariants on every change. Full text: @docs/rules.md
+
+1. Keep `make check` green.
+2. Do not run cloud-cost commands (deploys, BQ queries, pipeline runs) — human-only.
+3. No secrets or JSON service-account keys in commits.
+4. YAGNI / reuse / fewest files; fix root cause once (global ponytail User Rule).
+5. Consult @docs/memory.md before reversing decisions; append notable new ones.
+6. Prefer `feat|fix|test|ci|chore|docs(scope): …` commits.

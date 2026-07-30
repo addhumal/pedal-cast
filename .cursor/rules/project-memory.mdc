@@ -1,0 +1,15 @@
+---
+description: Pointer to project append-only decision log (docs/memory.md)
+alwaysApply: true
+---
+
+# Project memory (always apply)
+
+# ponytail: alwaysApply injects this every turn (context-cost ceiling). Kept thin
+# (pointer + append instruction); upgrade path: description-triggered rule if the
+# log grows large.
+
+- Before reversing an architectural or process choice, read @docs/memory.md.
+- After a notable decision, **append** a dated bullet at the bottom of
+  `docs/memory.md`. Do not rewrite history.
+- Product/roadmap context: @docs/PRD.md @docs/phases.md @docs/architecture.md
