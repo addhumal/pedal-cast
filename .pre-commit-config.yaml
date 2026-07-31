@@ -1,0 +1,32 @@
+# Pre-commit exists here for the two things `make check` cannot do: catching a
+# secret before it becomes a commit, and stripping notebook outputs before they
+# leak data into a public repo.
+#
+# Ruff and mypy are deliberately NOT duplicated here — they run in `make check`
+# and in CI. Pinning ruff in two places just invites the versions to drift.
+
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.0
+    hooks:
+      - id: gitleaks
+        name: gitleaks (block secrets before they are committed)
+
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+        name: strip notebook outputs (EDA touches real trip data)
+        files: \.ipynb$
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: detect-private-key
+      - id: check-added-large-files
+        args: ["--maxkb=512"]
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace

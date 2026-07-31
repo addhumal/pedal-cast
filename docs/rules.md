@@ -1,4 +1,4 @@
-# bikeshare-demand-mlops — Engineering Rules
+# pedal-cast — Engineering Rules
 
 Project-specific rules. Global Cursor User Rules already cover TDD and ponytail
 (lazy senior / ask before acting) — do not duplicate them here. Add only what is
@@ -8,11 +8,15 @@ Related: [PRD.md](PRD.md) · [architecture.md](architecture.md) · [memory.md](m
 
 ## Project invariants
 
-1. `make check` must pass before any task is considered complete.
-2. Cloud-cost commands (pipeline runs, deploys, BQ queries) are human-run only; agents do not run them.
-3. No secrets, credentials, or JSON service-account keys in code or commits.
+1. `make check` must pass before any task is considered complete. It covers Python and the frontend.
+2. Cloud-cost commands (pipeline runs, deploys, BigQuery queries, `terraform apply`) are human-run only. Agents do not run them.
+3. No secrets, credentials, or JSON service-account keys in code or commits. Nothing secret in `VITE_*` variables, which Vite inlines into the shipped bundle.
 4. All feature code is shared between training and serving (`src/features`) to prevent model/feature skew.
-5. Time-based splits are never random; all leakage rules in `docs/design.md` §4 are hard constraints.
+5. Time-based splits are never random; the leakage rules in [architecture.md](architecture.md) §4 are hard constraints, and the tests that enforce them do not get relaxed.
+6. Every change reaches `main` by pull request. `main` is branch-protected and a merge deploys.
+7. The Workload Identity provider must always carry an `attribute_condition` pinned to this repository, and the IAM binding must use a repo-scoped `principalSet`. See [architecture.md](architecture.md) §10.1 — an empty `attributeCondition` means anyone on GitHub can impersonate the service account.
+8. No bucket is ever made public, including the drift-report bucket. Read reports via signed URL or `gcloud storage cp`.
+9. The UI accessibility constraints in [design.md](design.md) are requirements with tests, not polish: `prefers-reduced-motion` disables smooth scroll and animation, and the forecast chart carries a text equivalent.
 
 ## Scope
 
@@ -23,7 +27,8 @@ Related: [PRD.md](PRD.md) · [architecture.md](architecture.md) · [memory.md](m
 ## Verification
 
 ```bash
-make check
+make check       # ruff (incl. S security rules), mypy, pip-audit, pytest, then check-web
+make check-web   # tsc, eslint, npm audit, vitest
 ```
 
 ## Decision log
