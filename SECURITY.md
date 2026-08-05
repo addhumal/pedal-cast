@@ -43,4 +43,14 @@ Detail in [docs/architecture.md](docs/architecture.md) §10. Briefly:
   notebook output stripping.
 - `ruff` security rules, CodeQL, Dependabot, `pip-audit`, and `npm audit` in the
   build gate.
-- Every bucket private, with public access prevention enforced.
+- Every bucket private, with public access prevention enforced. The one manual
+  state bucket at Gate 0 must be created the same way (see
+  `terraform/versions.tf`); Terraform cannot create the bucket that holds its
+  own state.
+
+## Known dependency exceptions
+
+`make check` currently ignores `PYSEC-2026-3552` (transitive `cryptography` via
+`google-auth` / `evidently`). Forcing `cryptography>=50` collapses the `mlflow`
+pin in the lockfile. Revisit when upstream allows a clean bump; do not treat the
+ignore as permanent.

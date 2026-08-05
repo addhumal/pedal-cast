@@ -78,23 +78,32 @@ smoke: ## Build the container locally and hit /v1/predict (Week 4)
 
 .PHONY: deploy
 deploy: ## HUMAN ONLY. Deploy a canary revision to Cloud Run (Week 4)
+	@$(call require_script,scripts/deploy.sh)
 	@echo "HUMAN ONLY: deploys to Cloud Run. Ctrl-C to abort." && sleep 3
 	./scripts/deploy.sh
 
 .PHONY: promote
 promote: ## HUMAN ONLY. Shift 100% traffic to the canary revision
+	@$(call require_script,scripts/promote.sh)
 	@echo "HUMAN ONLY: promotes the canary to all traffic. Ctrl-C to abort." && sleep 3
 	./scripts/promote.sh
 
 .PHONY: rollback
 rollback: ## HUMAN ONLY. Shift 100% traffic to the previous revision
+	@$(call require_script,scripts/rollback.sh)
 	./scripts/rollback.sh
 
 .PHONY: drift-run
 drift-run: ## HUMAN ONLY. Execute the Evidently drift Cloud Run Job (Week 5)
+	@$(call require_script,scripts/drift_run.sh)
 	@echo "HUMAN ONLY: runs a Cloud Run Job. Ctrl-C to abort." && sleep 3
 	./scripts/drift_run.sh
 
 .PHONY: load-test
 load-test: ## HUMAN ONLY. Locust burst against /v1/predict (Week 5)
 	uv run --group load locust -f locustfile.py
+
+# Fail before the HUMAN ONLY pause when the Week 4/5 script is not in the tree yet.
+define require_script
+	test -f $(1) || (echo "missing $(1); lands in a later week" >&2; exit 1)
+endef
