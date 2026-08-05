@@ -14,7 +14,9 @@ terraform {
   # Gate 0, and because Terraform cannot create the bucket that stores its own
   # state. That one bucket is the single manual resource in this project:
   #
-  #   gcloud storage buckets create gs://PROJECT_ID-tfstate --uniform-bucket-level-access
+  #   gcloud storage buckets create gs://PROJECT_ID-tfstate \
+#     --uniform-bucket-level-access \
+#     --public-access-prevention
   #   terraform init -backend-config="bucket=PROJECT_ID-tfstate"
   backend "gcs" {
     prefix = "terraform/state"
