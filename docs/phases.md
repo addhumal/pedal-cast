@@ -1,49 +1,37 @@
-# pedal-cast — Master Week Plan
+# pedal-cast — Roadmap
 
-Related: [PRD.md](PRD.md) · [architecture.md](architecture.md) · [memory.md](memory.md)
+Related: [PRD.md](PRD.md) · [architecture.md](architecture.md)
 
-Eight blocks. Each has a detail sub-doc in [plans/](plans/) carrying deliverables, tests, the human gate, and a results section filled in as real numbers land.
-
-Two rules govern progress: a block is not done until `make check` is green **and** its definition of done is satisfied; and every block that needs a cloud-cost command stops at a **human gate**, because agents do not run those ([rules.md](rules.md) invariant 2).
+Eight blocks. A block is done when `make check` is green and the definition of done below is met. Cloud-cost steps (deploys, BigQuery jobs, Vertex runs, `terraform apply`) are manual.
 
 ## Blocks
 
 | Block | Goal | Definition of done | Status |
 |---|---|---|---|
-| [Week 0](plans/week-0.md) | Docs restructure, scaffold, Terraform, security baseline | Budget alert live; dataset and `T_NOW` chosen and recorded | In progress |
-| [Week 1](plans/week-1.md) | Data, zones, baselines | `make check` green; both baseline MAE numbers in the README table | Planned |
-| [Week 2](plans/week-2.md) | Features, model, MLflow | Model beats seasonal naive; MLflow screenshot saved; promotion rule unit-tested | Planned |
-| [Week 3](plans/week-3.md) | Vertex AI pipeline | One successful Vertex run in the console; model in registry; compiled JSON in repo | Planned |
-| [Week 4a](plans/week-4a.md) | API, Docker, CI/CD | Public URL returns predictions; a merge deploys a canary; WIF provably pinned to this repo | Planned |
-| [Week 4b](plans/week-4b.md) | Interactive Three.js city + live widget | City live (mouse explore, click landmarks); widget returns a forecast; reduced-motion fallback; `/v1` and `/docs` still resolve | Planned |
-| [Week 5](plans/week-5.md) | Monitoring and failure drill | Drift report in GCS; alert fired in a test; rollback proven; latency in README | Planned |
-| [Week 6](plans/week-6.md) | Portfolio packaging | A stranger can understand and reproduce the project from the README alone | Planned |
+| Week 0 | Scaffold, Terraform, security baseline | Budget alert live; dataset and `T_NOW` chosen and recorded in architecture §2 | In progress |
+| Week 1 | Data, zones, baselines | `make check` green; both baseline MAE numbers in the README table | Planned |
+| Week 2 | Features, model, MLflow | Model beats seasonal naive; MLflow screenshot saved; promotion rule unit-tested | Planned |
+| Week 3 | Vertex AI pipeline | One successful Vertex run in the console; model in the registry; compiled JSON in the repo | Planned |
+| Week 4a | API, Docker, CI/CD | Public URL returns predictions; a merge deploys a canary; WIF pinned to this repo | Planned |
+| Week 4b | Interactive Three.js city + live widget | City live (mouse explore, click landmarks); widget returns a forecast; reduced-motion fallback; `/v1` and `/docs` still resolve | Planned |
+| Week 5 | Monitoring and failure drill | Drift report in GCS; alert fired in a test; rollback proven; latency in README | Planned |
+| Week 6 | Portfolio packaging | A stranger can understand and reproduce the project from the README alone | Planned |
 
 ## Human gates
 
-Seven points where a human runs the command and reports back:
-
-| Gate | After | What the human does |
+| Gate | After | What happens |
 |---|---|---|
 | 0 | Week 0 | Create project, link billing, create state bucket, apply budget, run dataset recency queries, enable repo security settings |
-| 1 | Week 1 | Run ingestion query, snapshot raw extract to GCS, run baselines, report MAE |
+| 1 | Week 1 | Run ingestion, snapshot raw extract to GCS, run baselines, report MAE |
 | 2 | Week 2 | Run tuning sweep, save MLflow screenshot, report best-trial metrics |
 | 3 | Week 3 | Submit the Vertex pipeline run |
 | 4a | Week 4a | Apply WIF and verify `attributeCondition` is non-empty, enable required checks, Dependabot, CodeQL, merge to deploy the first canary |
 | 4b | Week 4b | Deploy the combined image; verify city, widget, reduced-motion fallback |
 | 5 | Week 5 | Run drift job, force an alert, run Locust, perform the rollback drill |
 
-## Deviations from the original draft
+## Notes
 
-Recorded here rather than silently applied, with dated bullets in [memory.md](memory.md):
-
-- **Repo scaffold moved from Week 1 into Week 0.** Week 1's definition of done is `make check` green, which is impossible before `pyproject.toml` and the `Makefile` exist. Week 0 therefore runs longer than its original one-hour budget.
-- **Week 4 split into 4a and 4b**, so the API ships and is verified before the frontend that consumes it exists.
-- **A frontend was added** after the original draft had no UI at all.
-- **Week 4b is an interactive Three.js city** (mouse orbit / pan / zoom, click landmarks that open HUD panels including the prediction widget). Craft inspiration: [bruno-simon.com](https://bruno-simon.com/) — not a driveable game. Aimed at an AI / MLOps engineer portfolio. If 4b overruns, cut scene polish first, never testing or the reduced-motion fallback.
-
-## How to advance
-
-1. **Stacked PRs** — one feature / concern per pull request. Base the PR on the branch it depends on; retarget to `main` after that base merges. Do not pile unrelated work onto an open PR ([rules.md](rules.md) invariant 7).
-2. Follow [rules.md](rules.md) plus the global TDD and ponytail user rules.
-3. Update the status column here and append to [memory.md](memory.md) when a block completes or scope changes.
+- Scaffold landed in Week 0 (Week 1 needs `make check`).
+- Week 4 is split into 4a (API) and 4b (frontend) so the contract freezes before the UI.
+- Week 4b is an interactive Three.js city: mouse orbit / pan / zoom, click landmarks for HUD panels including the prediction widget. Craft nod to [bruno-simon.com](https://bruno-simon.com/), not a driveable game.
+- Work lands as stacked PRs: one concern per PR, base on the branch it depends on, retarget to `main` after that base merges.

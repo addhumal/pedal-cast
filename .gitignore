@@ -70,3 +70,15 @@ web/dist/
 # ---------------------------------------------------------------------------
 .DS_Store
 *.swp
+
+# ---------------------------------------------------------------------------
+# Local-only process docs (public remote stays portfolio-facing)
+# Week stubs, engineering rules, decision log, and Cursor config stay on the
+# laptop. Do not force-add these.
+# ---------------------------------------------------------------------------
+.cursor/
+docs/plans/
+docs/rules.md
+docs/memory.md
+*.plan.md
+**/*.plan.md

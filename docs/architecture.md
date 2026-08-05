@@ -1,9 +1,9 @@
 # pedal-cast — Architecture
 
 Production-grade hourly bike-share demand forecasting on GCP.
-This document is the source of truth for architecture and decisions. Cursor: read this before proposing changes. If a proposal contradicts a decision here, stop and ask.
+This document is the source of truth for architecture and decisions. If a proposal contradicts a decision here, stop and ask.
 
-Related: [PRD.md](PRD.md) · [phases.md](phases.md) · [design.md](design.md) · [rules.md](rules.md) · [memory.md](memory.md)
+Related: [PRD.md](PRD.md) · [phases.md](phases.md) · [design.md](design.md)
 
 ---
 
@@ -138,7 +138,7 @@ FastAPI, versioned prefix `/v1`. Endpoints:
 
 **Static frontend:** the React build is served by this same service via `StaticFiles`, mounted **last** so `/v1/*` and `/docs` resolve first. A contract test asserts an unknown `/v1` path returns JSON rather than `index.html`.
 
-<!-- ponytail: one service means frontend commits produce model-style canary revisions,
+<!-- One service means frontend commits produce model-style canary revisions,
      softening the clean "a new revision means a new model" semantics above.
      Upgrade path: move the build to its own Cloud Run service or a CDN. -->
 
@@ -260,7 +260,7 @@ This is a **public repository**, so the posture below assumes anyone can read th
 | Deploy | Cloud Build step | Post-deploy smoke against canary revision |
 | Load | Locust (light) | 10–50 RPS burst against `/v1/predict` for p95 + cold-start numbers (Week 5, run once, publish) |
 
-Agent rule (Cursor): no task is complete until `make check` passes. Cloud-cost commands (pipeline runs, deploys, BQ queries) are human-run only.
+No task is complete until `make check` passes. Cloud-cost commands (pipeline runs, deploys, BQ queries) are manual.
 
 ---
 
@@ -276,14 +276,11 @@ pedal-cast/
 ├── .pre-commit-config.yaml    # gitleaks, nbstripout
 ├── Dockerfile                 # Node build stage + Python runtime stage
 ├── cloudbuild.yaml
-├── docs/                      # governance: see below
+├── docs/
 │   ├── PRD.md                 # product requirements, goal and scope
-│   ├── architecture.md        # this file — source of truth
+│   ├── architecture.md        # this file
 │   ├── design.md              # UI design system
-│   ├── phases.md              # master week plan
-│   ├── plans/                 # per-week detail sub-docs
-│   ├── rules.md               # engineering rules
-│   └── memory.md              # append-only decision log
+│   └── phases.md              # week-by-week roadmap
 ├── terraform/                 # all GCP resources incl. budget alert
 ├── src/
 │   ├── config.py              # pydantic-settings; T_NOW lives here
@@ -298,13 +295,13 @@ pedal-cast/
 └── notebooks/                 # EDA only
 ```
 
-Note: the governance docs live under `docs/`, not at the repo root, per the always-apply Cursor rules that reference `@docs/...`. The week-by-week checklist that an earlier draft called `tasks.md` is now [phases.md](phases.md) plus [plans/](plans/).
+Process notes and per-week working stubs stay off the public tree.
 
 ---
 
 ## 13. Week-by-week plan
 
-Moved to [phases.md](phases.md), which is the master plan, with a detail sub-doc per week under [plans/](plans/). Each week carries its own definition of done.
+See [phases.md](phases.md). Each week has a definition of done there.
 
 **Slack policy:** if a week overruns, cut from the stretch list, never from testing or monitoring. Stretch items (documented, not built): Feast, drift-triggered retraining, auto-promotion, Optuna, probabilistic forecasts (quantile loss), moving the frontend to its own service or a CDN.
 
@@ -315,7 +312,7 @@ Moved to [phases.md](phases.md), which is the master plan, with a detail sub-doc
 | Failure | Mitigation |
 |---|---|
 | Public dataset removed/changed | Week-1 raw extract snapshotted to GCS; pipeline reads the snapshot |
-| Cost runaway (agent or retry loop) | Budget alert, bytes-billed caps, human-only cloud commands, max instances 2 |
+| Cost runaway (retry loops, surprise spend) | Budget alert, bytes-billed caps, manual cloud commands, max instances 2 |
 | Bad model reaches prod | Promotion rule gate + canary + smoke test + rollback target |
 | Silent data quality break | pandera in-pipeline, fails loudly; timestamp continuity check |
 | Cold-start latency embarrassment | Measured and published honestly; min-instances=1 costs noted as the fix |

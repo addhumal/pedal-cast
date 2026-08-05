@@ -1,5 +1,7 @@
 """Central configuration.
 
+code created by Aditya Dhumal
+
 `T_NOW` is the simulated present (docs/architecture.md §2). Training reads data
 before it; the drift job replays data after it. Every time-based split derives
 from this one value, which is why it is validated here rather than trusted.

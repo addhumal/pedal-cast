@@ -6,11 +6,11 @@ An end-to-end MLOps system, not a notebook. [docs/architecture.md](docs/architec
 
 ## Status
 
-Week 0 — foundation. Nothing is deployed yet. Dataset and simulated `T_NOW` are not yet chosen; see [docs/architecture.md](docs/architecture.md) §2.
+Week 0, foundation. Nothing is deployed yet. Dataset and simulated `T_NOW` are not yet chosen; see [docs/architecture.md](docs/architecture.md) §2.
 
 ## Metrics
 
-Filled in as each number is measured, not before. Empty rows are honest, not pending.
+Filled in as each number is measured, not before. Empty rows mean not measured yet.
 
 | Metric | Value | Measured |
 |---|---|---|
@@ -29,12 +29,10 @@ BigQuery · scikit-learn + XGBoost · MLflow · Vertex AI Pipelines (KFP v2) · 
 
 ## Project docs
 
-- [docs/PRD.md](docs/PRD.md) — product requirements, goal and scope
-- [docs/architecture.md](docs/architecture.md) — source of truth for architecture and decisions
-- [docs/design.md](docs/design.md) — UI design system
-- [docs/phases.md](docs/phases.md) — master week plan, with detail sub-docs in [docs/plans/](docs/plans/)
-- [docs/rules.md](docs/rules.md) — project-specific engineering rules
-- [docs/memory.md](docs/memory.md) — append-only decision log
+- [docs/PRD.md](docs/PRD.md): product requirements, goal and scope
+- [docs/architecture.md](docs/architecture.md): architecture and decisions
+- [docs/design.md](docs/design.md): UI design system
+- [docs/phases.md](docs/phases.md): week-by-week roadmap
 
 ## Local development
 
@@ -43,8 +41,8 @@ uv sync              # install pinned dependencies
 make check           # lint, typecheck, security lint, tests
 ```
 
-Cloud commands (deploys, BigQuery queries, Vertex pipeline runs) are run by a human, never by an agent. See [docs/rules.md](docs/rules.md).
+Cloud commands (deploys, BigQuery queries, Vertex pipeline runs) are manual. Do not script them into CI without a human gate.
 
 ## Security
 
-This is a public repository. See [docs/architecture.md](docs/architecture.md) §10 for the full posture and [SECURITY.md](SECURITY.md) for reporting.
+This is a public repository. See [docs/architecture.md](docs/architecture.md) §10 for the posture and [SECURITY.md](SECURITY.md) for reporting.

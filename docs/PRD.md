@@ -1,6 +1,6 @@
 # pedal-cast — Product Requirements Document
 
-Related: [architecture.md](architecture.md) · [phases.md](phases.md) · [design.md](design.md) · [rules.md](rules.md)
+Related: [architecture.md](architecture.md) · [phases.md](phases.md) · [design.md](design.md)
 
 ## Problem
 

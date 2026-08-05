@@ -2,9 +2,9 @@
 
 Related: [PRD.md](PRD.md) · [architecture.md](architecture.md)
 
-Scope: the React landing experience in `web/` — an interactive Three.js city that makes the MLOps system legible, with a live prediction widget opened from landmarks. Built in Week 4b, after the API contract is frozen in Week 4a.
+Scope: the React landing experience in `web/`, an interactive Three.js city that makes the MLOps system legible, with a live prediction widget opened from landmarks. Built in Week 4b, after the API contract is frozen in Week 4a.
 
-**Craft inspiration:** [bruno-simon.com](https://bruno-simon.com/) — immersive Three.js portfolio craft, not a clone. That site is a driveable game world; this one is for an AI / MLOps engineer. Exploration is mouse (orbit / pan / zoom) and click, never a vehicle, physics sim, or game loop.
+**Craft inspiration:** [bruno-simon.com](https://bruno-simon.com/). Immersive Three.js portfolio craft, not a clone. That site is a driveable game world; this one is for an AI / MLOps engineer. Exploration is mouse (orbit / pan / zoom) and click, never a vehicle, physics sim, or game loop.
 
 ---
 
@@ -30,8 +30,8 @@ Scope: the React landing experience in `web/` — an interactive Three.js city t
 
 No Rapier / physics. No Howler / soundtrack required in v1. No icon library until something actually needs more than three icons.
 
-<!-- ponytail: Three.js grows the JS bundle and can worsen Cloud Run cold start.
-     Ceiling: measure and publish honestly in Week 4b/5 results. Upgrade path:
+<!-- Three.js grows the JS bundle and can worsen Cloud Run cold start.
+     Measure and publish honestly in Week 4b/5 results. Upgrade path:
      lazy-load the canvas chunk, or ship a static 2D hero and keep 3D behind a
      "Enter city" gate. -->
 
