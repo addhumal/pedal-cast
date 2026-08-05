@@ -1,63 +1,36 @@
-# bikeshare-demand-mlops — Phases
+# pedal-cast — Roadmap
 
-Related: [PRD.md](PRD.md) · [architecture.md](architecture.md) · [design.md](design.md)
+Related: [PRD.md](PRD.md) · [architecture.md](architecture.md)
 
-## Phase 0 — Foundation
+Eight blocks. A block is done when `make check` is green and the definition of done below is met. Cloud-cost steps (deploys, BigQuery jobs, Vertex runs, `terraform apply`) are manual.
 
-Status: in progress
+## Blocks
 
-- GCP project + billing alert via Terraform.
-- Choose dataset and `T_NOW` (Week 0 checkpoint).
-- Seed repo governance and initial commit.
+| Block | Goal | Definition of done | Status |
+|---|---|---|---|
+| Week 0 | Scaffold, Terraform, security baseline | Budget alert live; dataset and `T_NOW` chosen and recorded in architecture §2 | In progress |
+| Week 1 | Data, zones, baselines | `make check` green; both baseline MAE numbers in the README table | Planned |
+| Week 2 | Features, model, MLflow | Model beats seasonal naive; MLflow screenshot saved; promotion rule unit-tested | Planned |
+| Week 3 | Vertex AI pipeline | One successful Vertex run in the console; model in the registry; compiled JSON in the repo | Planned |
+| Week 4a | API, Docker, CI/CD | Public URL returns predictions; a merge deploys a canary; WIF pinned to this repo | Planned |
+| Week 4b | Landing page and live widget | Landing page live; widget returns a forecast; `/v1` and `/docs` still resolve | Planned |
+| Week 5 | Monitoring and failure drill | Drift report in GCS; alert fired in a test; rollback proven; latency in README | Planned |
+| Week 6 | Portfolio packaging | A stranger can understand and reproduce the project from the README alone | Planned |
 
-## Phase 1 — Data + baselines
+## Human gates
 
-Status: planned
+| Gate | After | What happens |
+|---|---|---|
+| 0 | Week 0 | Create project, link billing, create state bucket, apply budget, run dataset recency queries, enable repo security settings |
+| 1 | Week 1 | Run ingestion, snapshot raw extract to GCS, run baselines, report MAE |
+| 2 | Week 2 | Run tuning sweep, save MLflow screenshot, report best-trial metrics |
+| 3 | Week 3 | Submit the Vertex pipeline run |
+| 4a | Week 4a | Apply WIF and verify `attributeCondition` is non-empty, enable required checks, Dependabot, CodeQL, merge to deploy the first canary |
+| 4b | Week 4b | Deploy the combined image; verify the page and widget |
+| 5 | Week 5 | Run drift job, force an alert, run Locust, perform the rollback drill |
 
-- Ingestion queries, hourly zone aggregates, pandera schemas.
-- EDA notebook and zone count decision.
-- Seasonal naive and t-24h baselines with validation MAE.
+## Notes
 
-## Phase 2 — Features + model + MLflow
-
-Status: planned
-
-- Leakage-safe feature build (lags, rolling, calendar, weather, zones).
-- sklearn + XGBoost pipeline, randomized search, MLflow logging.
-- Segment metrics and promotion rule (unit-tested).
-
-## Phase 3 — Vertex AI pipeline
-
-Status: planned
-
-- Componentize flow into KFP v2 components.
-- Compile, run end-to-end on Vertex, conditional registration.
-- Check compiled pipeline JSON into repo.
-
-## Phase 4 — Serving + CI/CD
-
-Status: planned
-
-- FastAPI service, model loading from GCS, hardening.
-- Dockerfile, Cloud Build canary deploy, smoke tests, WIF auth.
-
-## Phase 5 — Monitoring + failure drill
-
-Status: planned
-
-- Evidently drift job, dashboard, alert policies.
-- Locust run, deliberate bad deploy + rollback.
-- Weekly retraining schedule.
-
-## Phase 6 — Portfolio packaging
-
-Status: planned
-
-- README, demo video, LinkedIn post.
-
-## How to advance
-
-1. One vertical slice per change set.
-2. Follow project `docs/rules.md` + global TDD / ponytail User Rules.
-3. Update this file’s status and append to [memory.md](memory.md) when a stage
-   completes or scope changes.
+- Scaffold landed in Week 0 (Week 1 needs `make check`).
+- Week 4 is split into 4a (API) and 4b (frontend) so the contract freezes before the UI.
+- Work lands as stacked PRs: one concern per PR, base on the branch it depends on, retarget to `main` after that base merges.
