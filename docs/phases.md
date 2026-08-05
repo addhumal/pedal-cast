@@ -13,7 +13,7 @@ Eight blocks. A block is done when `make check` is green and the definition of d
 | Week 2 | Features, model, MLflow | Model beats seasonal naive; MLflow screenshot saved; promotion rule unit-tested | Planned |
 | Week 3 | Vertex AI pipeline | One successful Vertex run in the console; model in the registry; compiled JSON in the repo | Planned |
 | Week 4a | API, Docker, CI/CD | Public URL returns predictions; a merge deploys a canary; WIF pinned to this repo | Planned |
-| Week 4b | Landing page and live widget | Landing page live; widget returns a forecast; `/v1` and `/docs` still resolve | Planned |
+| Week 4b | Interactive Three.js city + live widget | City live (mouse explore, click landmarks); widget returns a forecast; reduced-motion fallback; `/v1` and `/docs` still resolve | Planned |
 | Week 5 | Monitoring and failure drill | Drift report in GCS; alert fired in a test; rollback proven; latency in README | Planned |
 | Week 6 | Portfolio packaging | A stranger can understand and reproduce the project from the README alone | Planned |
 
@@ -26,11 +26,12 @@ Eight blocks. A block is done when `make check` is green and the definition of d
 | 2 | Week 2 | Run tuning sweep, save MLflow screenshot, report best-trial metrics |
 | 3 | Week 3 | Submit the Vertex pipeline run |
 | 4a | Week 4a | Apply WIF and verify `attributeCondition` is non-empty, enable required checks, Dependabot, CodeQL, merge to deploy the first canary |
-| 4b | Week 4b | Deploy the combined image; verify the page and widget |
+| 4b | Week 4b | Deploy the combined image; verify city, widget, reduced-motion fallback |
 | 5 | Week 5 | Run drift job, force an alert, run Locust, perform the rollback drill |
 
 ## Notes
 
 - Scaffold landed in Week 0 (Week 1 needs `make check`).
 - Week 4 is split into 4a (API) and 4b (frontend) so the contract freezes before the UI.
+- Week 4b is an interactive Three.js city: mouse orbit / pan / zoom, click landmarks for HUD panels including the prediction widget. Craft nod to [bruno-simon.com](https://bruno-simon.com/), not a driveable game.
 - Work lands as stacked PRs: one concern per PR, base on the branch it depends on, retarget to `main` after that base merges.
