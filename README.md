@@ -4,7 +4,7 @@ Hourly bike-share demand forecasting per station zone on GCP.
 
 Predict trip starts for the next hour, serve them from a public REST API, and run an automated train → evaluate → register → deploy → monitor → retrain loop. Built as a portfolio MLOps system (scikit-learn, XGBoost, MLflow, Vertex AI, Terraform, canary deploys, drift monitoring), not a notebook dump.
 
-**Status:** Week 0 foundation. Nothing is deployed yet. Dataset and simulated `T_NOW` are not chosen; see [docs/architecture.md](docs/architecture.md) §2. Demo URL and screenshots land when serving is up.
+**Status:** Week 0 foundation. Nothing is deployed yet. Source data is Austin Bikeshare with simulated `T_NOW` = 2024-05-05 UTC; see [docs/architecture.md](docs/architecture.md) §2. Demo URL and screenshots land when serving is up.
 
 ---
 
