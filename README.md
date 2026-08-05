@@ -25,7 +25,7 @@ Filled in as each number is measured, not before. Empty rows are honest, not pen
 
 ## Stack
 
-BigQuery · scikit-learn + XGBoost · MLflow · Vertex AI Pipelines (KFP v2) · Vertex Model Registry · FastAPI on Cloud Run · Terraform · Cloud Build with canary deploys · Evidently drift monitoring · React + Vite frontend
+BigQuery · scikit-learn + XGBoost · MLflow · Vertex AI Pipelines (KFP v2) · Vertex Model Registry · FastAPI on Cloud Run · Terraform · Cloud Build with canary deploys · Evidently drift monitoring · React + Three.js (R3F) interactive city frontend
 
 ## Project docs
 

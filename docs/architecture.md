@@ -72,7 +72,7 @@ flowchart LR
 | Model registry | Vertex Model Registry (canonical) + MLflow runs (lineage) | One canonical registry; MLflow keeps full experiment history. |
 | Training model | sklearn Pipeline wrapping XGBoost | Tabular + strong seasonality = gradient boosting territory. Deep learning: worse cost/benefit here, and defending that shows judgment. |
 | Serving | FastAPI on Cloud Run | Scale-to-zero, CPU-only, revision-based traffic splitting gives canary for free. Not Vertex Endpoints: always-on node ≈ $60+/mo. |
-| Frontend | React + Vite + Tailwind, animate-ui via shadcn CLI, `lenis/react`, Recharts | Landing page plus a live prediction widget. Recharts arrives through the shadcn chart components, so it is reuse rather than a separate charting decision. |
+| Frontend | React + Vite + Tailwind, Three.js via R3F/drei, animate-ui via shadcn CLI, Recharts; Lenis on the 2D fallback only | Interactive city (mouse explore, click landmarks → HUD panels) plus a live prediction widget. Craft inspiration [bruno-simon.com](https://bruno-simon.com/) — not a driveable game; this is an AI/MLOps engineer surface. Recharts via shadcn chart components. Bundle/cold-start cost measured and published. |
 | Frontend hosting | Static build served by the same FastAPI container | One image, one deploy, no CORS. Tradeoff and its ceiling recorded in §6. |
 | CI/CD | GitHub → Cloud Build → Artifact Registry → Cloud Run | Native GCP path; canary via traffic split. |
 | IaC | Terraform | Every GCP resource in code. Clicking around the console is not reproducible and not portfolio-grade. |

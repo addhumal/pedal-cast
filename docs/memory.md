@@ -94,3 +94,26 @@ price attached.
 single manual resource, since Terraform cannot create the bucket that stores its
 own state. Backend bucket is supplied via `-backend-config` at init time because
 the project ID is unknown until Gate 0.
+
+---
+
+## 2026-08-05 — Interactive Three.js landing (Week 4b)
+
+**Week 4b owns a full interactive city**, not a static scroll page. Craft
+inspiration is [bruno-simon.com](https://bruno-simon.com/) (immersive Three.js
+portfolio craft). Explicitly **not** a driveable game: no vehicle, no Rapier /
+physics, no scores. Interaction is mouse orbit / pan / zoom and click landmarks
+that open HUD panels (architecture, metrics, decisions, live prediction widget).
+Audience framing: AI / MLOps engineer, not game designer.
+
+Stack addition: `@react-three/fiber` + `@react-three/drei`. Lenis moves to the
+reduced-motion / no-WebGL 2D fallback only. If Week 4b overruns, cut scene polish
+first — never testing, never the fallback, never the widget contract. Bundle size
+and cold start are measured and published honestly (ponytail ceiling in
+`docs/design.md`).
+
+**Stacked PRs from here on.** One feature / concern per pull request. Base each
+PR on the branch it depends on; retarget to `main` when that base merges. Do not
+pile unrelated features onto an open PR. Recorded as [rules.md](rules.md)
+invariant 7. First application: this Three.js plan change is its own PR stacked
+on `chore/week-0-foundation`, not folded into Week 0.

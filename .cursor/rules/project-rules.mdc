@@ -12,4 +12,6 @@ Follow project invariants on every change. Full text: @docs/rules.md
 3. No secrets or JSON service-account keys in commits.
 4. YAGNI / reuse / fewest files; fix root cause once (global ponytail User Rule).
 5. Consult @docs/memory.md before reversing decisions; append notable new ones.
-6. Prefer `feat|fix|test|ci|chore|docs(scope): …` commits.
+6. Every change reaches `main` by pull request. `main` is branch-protected and a merge deploys.
+7. Stacked PRs — one concern per PR; base on the dependency branch; retarget to `main` after the base merges.
+8. Prefer `feat|fix|test|ci|chore|docs(scope): …` commits.

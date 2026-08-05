@@ -37,6 +37,7 @@ Predict hourly bike-share demand (trip starts) per station cluster / zone, serve
 - No multi-region or HA beyond what Cloud Run gives for free.
 - No user auth on the API. It is a public demo, rate-limited instead.
 - No light mode, no SSR, no client-side routing in the frontend.
+- No driveable / physics game loop on the landing page. Three.js is for spatial storytelling and demoing the forecast, not a Bruno Simon–style portfolio game.
 
 ## Feature set (current)
 
@@ -45,7 +46,7 @@ Predict hourly bike-share demand (trip starts) per station cluster / zone, serve
 - Automated Vertex AI training pipeline with a coded promotion rule and conditional registration.
 - Cloud Run serving with canary deploys and a proven rollback path.
 - Drift monitoring with Evidently on a replayed post-`T_NOW` window.
-- React landing page with a live prediction widget, served by the same container.
+- Interactive Three.js city landing (mouse explore, click landmarks) with a live prediction widget, served by the same container; reduced-motion / no-WebGL 2D fallback.
 
 ## Future scope
 

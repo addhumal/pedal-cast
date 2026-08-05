@@ -14,9 +14,10 @@ Related: [PRD.md](PRD.md) · [architecture.md](architecture.md) · [memory.md](m
 4. All feature code is shared between training and serving (`src/features`) to prevent model/feature skew.
 5. Time-based splits are never random; the leakage rules in [architecture.md](architecture.md) §4 are hard constraints, and the tests that enforce them do not get relaxed.
 6. Every change reaches `main` by pull request. `main` is branch-protected and a merge deploys.
-7. The Workload Identity provider must always carry an `attribute_condition` pinned to this repository, and the IAM binding must use a repo-scoped `principalSet`. See [architecture.md](architecture.md) §10.1 — an empty `attributeCondition` means anyone on GitHub can impersonate the service account.
-8. No bucket is ever made public, including the drift-report bucket. Read reports via signed URL or `gcloud storage cp`.
-9. The UI accessibility constraints in [design.md](design.md) are requirements with tests, not polish: `prefers-reduced-motion` disables smooth scroll and animation, and the forecast chart carries a text equivalent.
+7. **Stacked PRs for separate features.** One concern per PR. Base each PR on the branch it depends on (not a kitchen-sink branch). When the base merges into `main`, retarget the next PR to `main`. Do not pile unrelated features onto an open PR.
+8. The Workload Identity provider must always carry an `attribute_condition` pinned to this repository, and the IAM binding must use a repo-scoped `principalSet`. See [architecture.md](architecture.md) §10.1 — an empty `attributeCondition` means anyone on GitHub can impersonate the service account.
+9. No bucket is ever made public, including the drift-report bucket. Read reports via signed URL or `gcloud storage cp`.
+10. The UI accessibility constraints in [design.md](design.md) are requirements with tests, not polish: `prefers-reduced-motion` (or missing WebGL) mounts the 2D fallback and does not mount the Three.js canvas; landmarks remain keyboard-reachable; the forecast chart carries a text equivalent.
 
 ## Scope
 
