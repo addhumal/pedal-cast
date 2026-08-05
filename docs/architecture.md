@@ -17,15 +17,22 @@ Moved to [PRD.md](PRD.md), which is the single home for goal, non-goals, and suc
 
 Candidate BigQuery public datasets:
 
-| Option | Dataset | Notes |
-|---|---|---|
-| A (default) | `bigquery-public-data.london_bicycles` | Large, rich, includes station table |
-| B | `bigquery-public-data.austin_bikeshare` | Smaller, simpler |
-| C | `bigquery-public-data.new_york_citibike` | Well known, but trips table has historically been stale |
+| Option | Dataset | Max start (queried 2026-08-05) | Notes |
+|---|---|---|---|
+| A | `bigquery-public-data.london_bicycles` | 2023-01-15 | Large, rich, includes station table |
+| B (**chosen**) | `bigquery-public-data.austin_bikeshare` | 2024-06-30 | Freshest; smaller, simpler |
+| C | `bigquery-public-data.new_york_citibike` | 2018-05-31 | Well known, but trips table is stale |
 
-**Week 0 task (30 min, before any code):** run `SELECT MAX(start_date) ...` on each candidate. Choose the dataset with the most recent and complete data. Record the choice and the max date here. Staleness is acceptable (we simulate "now" as a cutoff date inside the data window) but must be a *documented, deliberate* choice — the README states the simulation window explicitly.
+**Decision (Gate 0, 2026-08-05):** Austin. Recency wins over London’s richer schema. NYC is too stale to simulate a useful post-`T_NOW` replay window.
 
-**Status:** not yet run. `src/config.py` currently defaults to `london_bicycles` with a placeholder `T_NOW`. Both get replaced with real values after Gate 0.
+| Field | Value |
+|---|---|
+| Dataset | `bigquery-public-data.austin_bikeshare` |
+| Trips / stations | `bikeshare_trips` / `bikeshare_stations` |
+| `holidays` country | `US` |
+| `T_NOW` | `2024-05-05T00:00:00Z` (~8 weeks before max start, leaves May–June 2024 for drift replay) |
+| GCP project | `pedel-504615` |
+| Region (for now) | `europe-west2` (Terraform default; revisit at Week 4a) |
 
 **Simulated-time design:** define `T_NOW` (config value) inside the data window. Everything downstream treats `T_NOW` as the present: training uses data before it, "incoming production traffic" for drift monitoring is replayed from data after it. This makes drift detection demonstrable with historical data.
 

@@ -11,9 +11,13 @@ from src.config import Settings
 
 
 def test_defaults_load() -> None:
+    # Gate 0: Austin won on recency (max start 2024-06-30).
     settings = Settings()
-    assert settings.source_dataset == "bigquery-public-data.london_bicycles"
-    assert settings.holidays_country == "GB"
+    assert settings.source_dataset == "bigquery-public-data.austin_bikeshare"
+    assert settings.source_trips_table == "bikeshare_trips"
+    assert settings.source_stations_table == "bikeshare_stations"
+    assert settings.holidays_country == "US"
+    assert settings.t_now == datetime(2024, 5, 5, tzinfo=UTC)
     assert 10 <= settings.zone_count <= 30
 
 
@@ -23,7 +27,7 @@ def test_t_now_is_timezone_aware() -> None:
 
 def test_naive_t_now_is_rejected() -> None:
     with pytest.raises(ValidationError, match="timezone-aware"):
-        Settings(t_now=datetime(2023, 1, 1))
+        Settings(t_now=datetime(2024, 5, 5))
 
 
 def test_future_t_now_is_rejected() -> None:

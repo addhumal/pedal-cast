@@ -8,7 +8,7 @@ Eight blocks. A block is done when `make check` is green and the definition of d
 
 | Block | Goal | Definition of done | Status |
 |---|---|---|---|
-| Week 0 | Scaffold, Terraform, security baseline | Budget alert live; dataset and `T_NOW` chosen and recorded in architecture §2 | In progress |
+| Week 0 | Scaffold, Terraform, security baseline | Budget alert live; dataset and `T_NOW` chosen and recorded in architecture §2 | Done (Gate 0 human steps via console/`gcloud`; full TF apply deferred to Week 4a+) |
 | Week 1 | Data, zones, baselines | `make check` green; both baseline MAE numbers in the README table | Planned |
 | Week 2 | Features, model, MLflow | Model beats seasonal naive; MLflow screenshot saved; promotion rule unit-tested | Planned |
 | Week 3 | Vertex AI pipeline | One successful Vertex run in the console; model in the registry; compiled JSON in the repo | Planned |

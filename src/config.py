@@ -25,7 +25,8 @@ class Settings(BaseSettings):
     )
 
     # --- GCP ---------------------------------------------------------------
-    gcp_project_id: str = "pedal-cast-dev"
+    gcp_project_id: str = "pedel-504615"
+    # Region stays europe-west2 for Gate 0; revisit with Terraform at Week 4a.
     gcp_region: str = "europe-west2"
     bq_dataset: str = "pedal_cast"
 
@@ -34,14 +35,14 @@ class Settings(BaseSettings):
     artifact_gcs_uri: str = ""
 
     # --- Source data -------------------------------------------------------
-    # Placeholder pending Gate 0: the recency queries decide the dataset, and
-    # the answer also fixes `t_now` and `holidays_country`.
-    source_dataset: str = "bigquery-public-data.london_bicycles"
-    source_trips_table: str = "cycle_hire"
-    source_stations_table: str = "cycle_stations"
-    holidays_country: str = "GB"
+    # Gate 0 (2026-08-05): Austin won on recency. T_NOW is ~8 weeks before
+    # max(start_time)=2024-06-30 so post-T_NOW replay stays inside the data.
+    source_dataset: str = "bigquery-public-data.austin_bikeshare"
+    source_trips_table: str = "bikeshare_trips"
+    source_stations_table: str = "bikeshare_stations"
+    holidays_country: str = "US"
 
-    t_now: datetime = datetime(2023, 1, 1, tzinfo=UTC)
+    t_now: datetime = datetime(2024, 5, 5, tzinfo=UTC)
 
     # --- Features ----------------------------------------------------------
     # 10-30 per docs/architecture.md §4; the real number comes from Week 1 EDA.
