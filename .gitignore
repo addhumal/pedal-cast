@@ -1,0 +1,84 @@
+# ---------------------------------------------------------------------------
+# Secrets and credentials — this is a public repo (docs/architecture.md 10.2)
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*-key.json
+*_key.json
+*credentials*.json
+*service-account*.json
+*sa-key*.json
+
+# ---------------------------------------------------------------------------
+# Terraform — state can contain sensitive values. State lives in GCS; these
+# patterns are a guard against a local run leaking one in.
+# ---------------------------------------------------------------------------
+.terraform/
+# .terraform.lock.hcl IS committed on purpose — it pins provider versions so
+# everyone resolves the same ones. Only the .terraform/ cache is ignored.
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# ---------------------------------------------------------------------------
+# MLflow — local tracking store and artifacts
+# ---------------------------------------------------------------------------
+mlruns/
+mlartifacts/
+mlflow.db
+
+# ---------------------------------------------------------------------------
+# Data — nothing extracted from BigQuery belongs in git
+# ---------------------------------------------------------------------------
+data/
+*.parquet
+*.csv
+!tests/**/*.csv
+
+# ---------------------------------------------------------------------------
+# Frontend (Week 4b)
+# ---------------------------------------------------------------------------
+node_modules/
+web/dist/
+.vite/
+
+# ---------------------------------------------------------------------------
+# Notebooks — outputs are stripped by nbstripout, but checkpoints never help
+# ---------------------------------------------------------------------------
+.ipynb_checkpoints/
+
+# ---------------------------------------------------------------------------
+# OS / editor
+# ---------------------------------------------------------------------------
+.DS_Store
+*.swp
+
+# ---------------------------------------------------------------------------
+# Local-only process docs (public remote stays portfolio-facing)
+# Week stubs, engineering rules, decision log, and Cursor config stay on the
+# laptop. Do not force-add these.
+# ---------------------------------------------------------------------------
+.cursor/
+docs/plans/
+docs/rules.md
+docs/memory.md
+*.plan.md
+**/*.plan.md

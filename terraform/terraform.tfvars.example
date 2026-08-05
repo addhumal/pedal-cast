@@ -1,0 +1,12 @@
+# Copy to terraform.tfvars and fill in at Gate 0.
+# terraform.tfvars is gitignored — it names your billing account and email.
+
+project_id         = "pedal-cast-XXXXXX"
+billing_account_id = "XXXXXX-XXXXXX-XXXXXX"
+alert_email        = "you@example.com"
+
+# Defaults that usually need no change:
+# region                  = "europe-west2"
+# budget_amount_usd       = 15
+# github_repository       = "addhumal/pedal-cast"
+# artifact_retention_days = 90
