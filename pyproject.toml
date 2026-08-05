@@ -40,7 +40,7 @@ dev = [
     "pandas-stubs>=2.2",
 ]
 # Week 5 only. Kept out of dev so routine installs stay lean.
-load = ["locust>=2.31"]
+load = ["locust>=2.46.3"]
 
 [tool.uv]
 default-groups = ["dev"]
