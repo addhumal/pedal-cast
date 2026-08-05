@@ -21,7 +21,7 @@ Eight blocks. A block is done when `make check` is green and the definition of d
 
 | Gate | After | What happens |
 |---|---|---|
-| 0 | Week 0 | Create project, link billing, create state bucket, apply budget, run dataset recency queries, enable repo security settings |
+| 0 | Week 0 | Create project, link billing, create state bucket with uniform access **and** public access prevention, apply budget, run dataset recency queries, enable repo security settings |
 | 1 | Week 1 | Run ingestion, snapshot raw extract to GCS, run baselines, report MAE |
 | 2 | Week 2 | Run tuning sweep, save MLflow screenshot, report best-trial metrics |
 | 3 | Week 3 | Submit the Vertex pipeline run |
