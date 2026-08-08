@@ -1,8 +1,10 @@
 resource "google_bigquery_dataset" "main" {
-  dataset_id  = "pedal_cast"
-  project     = var.project_id
-  location    = var.region
-  description = "Hourly zone aggregates, feature tables, and the prediction log sink."
+  dataset_id = "pedal_cast"
+  project    = var.project_id
+  # Not var.region: a query cannot read `bigquery-public-data` (US multi-region) and
+  # write to a dataset elsewhere, so ingestion only works if this dataset is US.
+  location    = var.bq_location
+  description = "Hourly station aggregates, feature tables, and the prediction log sink."
 
   # No default_table_expiration_ms: feature tables must persist. Cost is
   # controlled by partitioning (per table, Week 1) and by maximum_bytes_billed
