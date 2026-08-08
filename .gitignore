@@ -48,7 +48,8 @@ mlflow.db
 # ---------------------------------------------------------------------------
 # Data — nothing extracted from BigQuery belongs in git
 # ---------------------------------------------------------------------------
-data/
+# Anchored: unanchored `data/` also swallows the src/data package.
+/data/
 *.parquet
 *.csv
 !tests/**/*.csv
