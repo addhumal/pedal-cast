@@ -140,13 +140,9 @@ def ingest_targets(settings: Settings | None = None) -> tuple[IngestTarget, ...]
     """The three extracts, in dependency-free order."""
     settings = settings or get_settings()
     source = settings.source_dataset
-    # Table identifiers cannot be query parameters; they come from config, not requests.
-    stations_sql = _STATIONS_SQL.format(  # noqa: S608
-        source=f"{source}.{settings.source_stations_table}"
-    )
-    demand_sql = _HOURLY_DEMAND_SQL.format(  # noqa: S608
-        source=f"{source}.{settings.source_trips_table}"
-    )
+    # Table identifiers cannot be query parameters; these come from config, not requests.
+    stations_sql = _STATIONS_SQL.format(source=f"{source}.{settings.source_stations_table}")
+    demand_sql = _HOURLY_DEMAND_SQL.format(source=f"{source}.{settings.source_trips_table}")
     weather_sql = _WEATHER_SQL.format(
         lat=_AUSTIN_LAT,
         lon=_AUSTIN_LON,
@@ -181,7 +177,9 @@ def run_ingestion(
     client = client or bigquery.Client(project=settings.gcp_project_id)
     written = {}
     for target in ingest_targets(settings):
-        job = client.query(target.query, job_config=target.job_config, location=settings.bq_location)
+        job = client.query(
+            target.query, job_config=target.job_config, location=settings.bq_location
+        )
         job.result()
         written[target.table] = client.get_table(target.job_config.destination).num_rows
     return written
@@ -189,7 +187,7 @@ def run_ingestion(
 
 def main() -> None:
     for table, rows in run_ingestion().items():
-        print(f"{table}: {rows} rows")  # noqa: T201 — this is a CLI entry point
+        print(f"{table}: {rows} rows")
 
 
 if __name__ == "__main__":

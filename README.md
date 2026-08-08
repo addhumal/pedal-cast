@@ -17,7 +17,7 @@ Predict trip starts for the next hour, serve them from a public REST API, and ru
 5. Ships an interactive Three.js city landing (mouse explore, click landmarks) with a live prediction widget in the same container.
 6. Watches drift with Evidently and rolls back with `make rollback` when a canary goes wrong.
 
-Details and tradeoffs: [docs/architecture.md](docs/architecture.md). Product framing: [docs/PRD.md](docs/PRD.md). UI: [docs/design.md](docs/design.md). Week plan: [docs/phases.md](docs/phases.md). Decisions as they were made: [docs/memory.md](docs/memory.md).
+Details and tradeoffs: [docs/architecture.md](docs/architecture.md). Product framing: [docs/PRD.md](docs/PRD.md). UI: [docs/design.md](docs/design.md). Week plan: [docs/phases.md](docs/phases.md).
 
 ---
 
