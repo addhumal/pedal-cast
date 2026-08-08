@@ -61,6 +61,10 @@ pipeline-compile: ## Compile the KFP pipeline to JSON — local, no cost (Week 3
 # ---------------------------------------------------------------------------
 # HUMAN ONLY — these spend money or mutate cloud state
 # ---------------------------------------------------------------------------
+.PHONY: ingest-dry-run
+ingest-dry-run: ## Validate the ingestion SQL and report bytes billed — free, runs nothing
+	uv run python -m src.data.ingest --dry-run
+
 .PHONY: ingest
 ingest: ## HUMAN ONLY. Run BigQuery ingestion (Week 1)
 	@echo "HUMAN ONLY: runs BigQuery jobs. Ctrl-C to abort." && sleep 3

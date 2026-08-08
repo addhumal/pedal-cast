@@ -12,11 +12,19 @@ decided in Week 1 EDA, so keeping the raw layer zone-free means re-zoning is a
 feature-layer change and not a re-ingest.
 """
 
+import argparse
 from dataclasses import dataclass
 
+import pandas as pd
 from google.cloud import bigquery
 
 from src.config import Settings, get_settings
+from src.data.schemas import (
+    DAILY_WEATHER,
+    HOURLY_DEMAND,
+    STATIONS,
+    assert_hourly_continuity,
+)
 
 STATIONS_TABLE = "stations"
 HOURLY_DEMAND_TABLE = "hourly_station_demand"
@@ -33,9 +41,9 @@ _FIRST_WEATHER_YEAR = 2013
 
 # GSOD encodes "no reading" as an out-of-range sentinel rather than NULL. Averaging
 # them in shifts a whole day's weather by hundreds of degrees.
-_MISSING_TEMP = "9999.9"
-_MISSING_PRCP = "99.99"
-_MISSING_WDSP = "999.9"
+_MISSING_TEMP = 9999.9
+_MISSING_PRCP = 99.99
+_MISSING_WDSP = 999.9
 
 _STATIONS_SQL = """
 SELECT
@@ -95,9 +103,12 @@ WITH nearby AS (
 daily AS (
   SELECT
     PARSE_DATE('%Y-%m-%d', CONCAT(gsod.year, '-', gsod.mo, '-', gsod.da)) AS weather_date,
-    NULLIF(gsod.temp, {missing_temp}) AS temp_f,
-    NULLIF(gsod.prcp, {missing_prcp}) AS precip_inches,
-    SAFE_CAST(NULLIF(gsod.wdsp, '{missing_wdsp}') AS FLOAT64) AS wind_knots
+    -- GSOD types these columns inconsistently across years (`wdsp` in particular is
+    -- STRING in some), and GoogleSQL will not compare a STRING column to a numeric
+    -- literal. Casting first makes the sentinel comparison type-agnostic.
+    NULLIF(SAFE_CAST(gsod.temp AS FLOAT64), {missing_temp}) AS temp_f,
+    NULLIF(SAFE_CAST(gsod.prcp AS FLOAT64), {missing_prcp}) AS precip_inches,
+    NULLIF(SAFE_CAST(gsod.wdsp AS FLOAT64), {missing_wdsp}) AS wind_knots
   FROM `bigquery-public-data.noaa_gsod.gsod*` AS gsod
   JOIN nearby ON gsod.stn = nearby.usaf AND gsod.wban = nearby.wban
   WHERE _TABLE_SUFFIX BETWEEN '{first_year}' AND '{last_year}'
@@ -169,10 +180,49 @@ def ingest_targets(settings: Settings | None = None) -> tuple[IngestTarget, ...]
     )
 
 
+_SCHEMAS = {
+    STATIONS_TABLE: STATIONS,
+    HOURLY_DEMAND_TABLE: HOURLY_DEMAND,
+    WEATHER_TABLE: DAILY_WEATHER,
+}
+
+
+def _validate(table: str, frame: pd.DataFrame) -> None:
+    _SCHEMAS[table].validate(frame)
+    if table == HOURLY_DEMAND_TABLE:
+        assert_hourly_continuity(frame)
+
+
+def dry_run_ingestion(
+    client: bigquery.Client | None = None, settings: Settings | None = None
+) -> dict[str, int]:
+    """Validate every query without running it, returning bytes each would bill.
+
+    Free, and the only pre-flight that catches a SQL or type error before the real
+    run does. It also shows what each extract would cost against
+    `maximum_bytes_billed`, which the real run enforces as a hard failure.
+    """
+    settings = settings or get_settings()
+    client = client or bigquery.Client(project=settings.gcp_project_id)
+    # Deliberately not the real job config: a dry run needs no destination, and the
+    # bytes cap would reject the job rather than report the estimate we are after.
+    config = bigquery.QueryJobConfig(dry_run=True, use_query_cache=False)
+    estimates = {}
+    for target in ingest_targets(settings):
+        job = client.query(target.query, job_config=config, location=settings.bq_location)
+        estimates[target.table] = job.total_bytes_processed
+    return estimates
+
+
 def run_ingestion(
     client: bigquery.Client | None = None, settings: Settings | None = None
 ) -> dict[str, int]:
-    """Execute every extract and return rows written per table."""
+    """Execute every extract, validate what landed, and return rows written per table.
+
+    Validation runs here rather than being left to the next stage: an extract that is
+    empty, gapped, or wrongly typed otherwise looks like a successful run and is only
+    noticed as a bad model weeks later.
+    """
     settings = settings or get_settings()
     client = client or bigquery.Client(project=settings.gcp_project_id)
     written = {}
@@ -181,11 +231,25 @@ def run_ingestion(
             target.query, job_config=target.job_config, location=settings.bq_location
         )
         job.result()
-        written[target.table] = client.get_table(target.job_config.destination).num_rows
+        # Reads the whole table into memory. Fine for Austin (single-digit millions of
+        # rows); a city-scale system would validate a sample plus SQL-side aggregates.
+        frame = client.list_rows(target.job_config.destination).to_dataframe()
+        _validate(target.table, frame)
+        written[target.table] = len(frame)
     return written
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="validate the SQL and report bytes billed, without running anything",
+    )
+    if parser.parse_args().dry_run:
+        for table, byte_count in dry_run_ingestion().items():
+            print(f"{table}: would bill {byte_count / 1024**3:.2f} GiB")
+        return
     for table, rows in run_ingestion().items():
         print(f"{table}: {rows} rows")
 
