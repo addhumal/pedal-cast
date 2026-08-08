@@ -95,6 +95,10 @@ flowchart LR
 
 The raw layer is deliberately zone-free. Zones are a clustering decision, so keeping them out of ingestion makes re-zoning a feature-layer change rather than a re-ingest. Ingestion materialises zero-demand hours inside each station's own first-to-last observed span, so a quiet hour is a recorded zero and a missing row is a real fault (`assert_hourly_continuity`). Ingestion covers the full history including post-`T_NOW` data, which the drift job replays.
 
+Ingestion validates each table it writes by reading it back through the schemas below, rather than reporting success on a row count. A query that succeeds and returns nothing, or returns a gapped series, is a silent failure that only surfaces later as a bad model. An empty extract is therefore a hard error, not a value. `make ingest-dry-run` is the free pre-flight: it validates the SQL against BigQuery and reports the bytes each extract would bill against the cap, before the paid run.
+
+The raw snapshot bucket is colocated with the dataset in the US, since a BigQuery extract job cannot write to a bucket in another location.
+
 **Target:** `trip_count` per `(zone_id, hour_ts)`.
 
 **Zones:** cluster stations into 10–30 zones (k-means on lat/lon, fit once, persisted). Per-station modeling is sparse and slow; citywide is too coarse to be interesting. Zone count chosen in Week 1 EDA and recorded here.
@@ -265,6 +269,7 @@ This is a **public repository**, so the posture below assumes anyone can read th
 |---|---|---|
 | Unit | pytest | Feature functions, promotion rule, splits, config parsing |
 | Data | pandera | Schema + distribution checks in-pipeline (fail loudly) |
+| Pre-flight | BigQuery dry run | `make ingest-dry-run` — SQL validity and bytes billed, before spending anything |
 | Model quality | pytest gate | Trained model must beat seasonal naive by ≥ X% on validation, or CI fails |
 | API | pytest + httpx | Contract tests: valid/invalid payloads, error shapes, metadata correctness, security headers, route precedence, forged `X-Forwarded-For` |
 | Frontend | Vitest | Widget loading, success, empty, and error states; reduced-motion behaviour |
