@@ -4,9 +4,15 @@ variable "project_id" {
 }
 
 variable "region" {
-  description = "Primary region. Defaults to London, matching the london_bicycles dataset."
+  description = "Primary region for compute and storage. Revisited at Week 4a."
   type        = string
   default     = "europe-west2"
+}
+
+variable "bq_location" {
+  description = "BigQuery dataset location. Must match the public source data (US multi-region)."
+  type        = string
+  default     = "US"
 }
 
 variable "billing_account_id" {

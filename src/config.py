@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     # Region stays europe-west2 for Gate 0; revisit with Terraform at Week 4a.
     gcp_region: str = "europe-west2"
     bq_dataset: str = "pedal_cast"
+    # BigQuery cannot join or write across locations, and the public source tables
+    # live in the US multi-region, so this stays US even though the rest of the
+    # project runs in europe-west2.
+    bq_location: str = "US"
 
     # Set per Cloud Run revision, which is what makes a model deploy a new
     # revision and therefore a clean canary (docs/architecture.md §6).
