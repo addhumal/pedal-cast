@@ -33,6 +33,7 @@ Candidate BigQuery public datasets:
 | `T_NOW` | `2024-05-05T00:00:00Z` (~8 weeks before max start, leaves May–June 2024 for drift replay) |
 | GCP project | `pedel-504615` |
 | Region (for now) | `europe-west2` (Terraform default; revisit at Week 4a) |
+| BigQuery dataset location | `US` — a query cannot read `bigquery-public-data` (US multi-region) and write elsewhere, so this one resource ignores the region above (Week 1) |
 
 **Simulated-time design:** define `T_NOW` (config value) inside the data window. Everything downstream treats `T_NOW` as the present: training uses data before it, "incoming production traffic" for drift monitoring is replayed from data after it. This makes drift detection demonstrable with historical data.
 
@@ -90,17 +91,21 @@ flowchart LR
 
 ## 4. Data design
 
-**Raw → feature flow:** raw trips → hourly aggregates per zone → feature table.
+**Raw → feature flow:** raw trips → hourly aggregates per **station** → zone rollup in the feature layer → feature table.
+
+The raw layer is deliberately zone-free. Zones are a clustering decision, so keeping them out of ingestion makes re-zoning a feature-layer change rather than a re-ingest. Ingestion materialises zero-demand hours inside each station's own first-to-last observed span, so a quiet hour is a recorded zero and a missing row is a real fault (`assert_hourly_continuity`). Ingestion covers the full history including post-`T_NOW` data, which the drift job replays.
 
 **Target:** `trip_count` per `(zone_id, hour_ts)`.
 
 **Zones:** cluster stations into 10–30 zones (k-means on lat/lon, fit once, persisted). Per-station modeling is sparse and slow; citywide is too coarse to be interesting. Zone count chosen in Week 1 EDA and recorded here.
 
+> **Open (Week 1 finding):** `bigquery-public-data.austin_bikeshare.bikeshare_stations` carries no coordinates. Its columns are `station_id, name, status, address, alternate_name, city_asset_number, property_type, number_of_docks, power_type, footprint_length, footprint_width, notes, council_district, modified_date` — Google's loader drops the latitude and longitude present in the City of Austin source. So k-means on lat/lon needs a coordinate source that is not the BigQuery table. Candidates: snapshot the city's kiosk endpoint (`data.austintexas.gov/resource/qd73-bsdg.json`, ~100 rows, has `location.latitude`/`location.longitude`) into the repo or the raw bucket; or drop k-means and zone by `council_district`, which is already in the table but yields few, unbalanced zones. Decide before the zone step.
+
 **Features (v1):**
 - Lags: t-1h, t-24h, t-168h (same hour last week)
 - Rolling: 24h and 168h rolling mean/std per zone
 - Calendar: hour-of-day, day-of-week, month, is_weekend, is_public_holiday (`holidays` package; country follows the dataset chosen at Gate 0)
-- Weather (NOAA GSOD daily join): temp, precipitation, wind
+- Weather (NOAA GSOD daily join): temp, precipitation, wind — averaged over the GSOD stations within 30 km of downtown Austin, so one station's silent day does not blank the city. Values are converted to Celsius, millimetres, and metres per second at ingestion, and GSOD's out-of-range sentinels (`9999.9`, `99.99`, `999.9`) are nulled rather than averaged in.
 - Zone static: zone_id (categorical), station_count per zone
 
 **Leakage rules (hard constraints):**
@@ -287,7 +292,8 @@ pedal-cast/
 │   ├── PRD.md                 # product requirements, goal and scope
 │   ├── architecture.md        # this file
 │   ├── design.md              # UI design system
-│   └── phases.md              # week-by-week roadmap
+│   ├── phases.md              # week-by-week roadmap
+│   └── memory.md              # dated decision log
 ├── terraform/                 # all GCP resources incl. budget alert
 ├── src/
 │   ├── config.py              # pydantic-settings; T_NOW lives here
