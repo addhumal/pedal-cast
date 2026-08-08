@@ -43,9 +43,11 @@ resource "google_storage_bucket" "artifacts" {
 # docs/architecture.md 14 mitigation for the public dataset changing or
 # disappearing, so deleting it would remove the thing it exists to protect.
 resource "google_storage_bucket" "raw" {
-  name                        = "${var.project_id}-raw"
-  project                     = var.project_id
-  location                    = local.bucket_defaults.location
+  name    = "${var.project_id}-raw"
+  project = var.project_id
+  # Not the default region: a BigQuery extract job can only write to a bucket in its
+  # dataset's location, so the Gate 1 snapshot needs this colocated with the dataset.
+  location                    = var.bq_location
   uniform_bucket_level_access = local.bucket_defaults.uniform_bucket_level_access
   public_access_prevention    = local.bucket_defaults.public_access_prevention
   force_destroy               = false
