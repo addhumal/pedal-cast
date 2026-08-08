@@ -292,8 +292,7 @@ pedal-cast/
 │   ├── PRD.md                 # product requirements, goal and scope
 │   ├── architecture.md        # this file
 │   ├── design.md              # UI design system
-│   ├── phases.md              # week-by-week roadmap
-│   └── memory.md              # dated decision log
+│   └── phases.md              # week-by-week roadmap
 ├── terraform/                 # all GCP resources incl. budget alert
 ├── src/
 │   ├── config.py              # pydantic-settings; T_NOW lives here
