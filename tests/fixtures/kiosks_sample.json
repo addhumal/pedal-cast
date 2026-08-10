@@ -1,0 +1,185 @@
+[
+  {
+    "kiosk_id": "11",
+    "kiosk_name": "22nd 1/2 & Rio Grande",
+    "kiosk_status": "active",
+    "location": {
+      "latitude": "30.2862",
+      "longitude": "-97.74516"
+    },
+    "address": "710 W. 22 1/2 St",
+    "property_type": "sidewalk",
+    "number_of_docks": "4",
+    "power_type": "solar",
+    "notes": "Kiosk ID & footprint length and width to be revised. These are 4 3.0 docks.",
+    "council_district": "9",
+    "modified_date": "2021-11-04T14:24:00.000",
+    ":@computed_region_a3it_2a2z": "2860",
+    ":@computed_region_8spj_utxs": "9"
+  },
+  {
+    "kiosk_id": "111",
+    "kiosk_name": "23rd & San Gabriel",
+    "kiosk_status": "active",
+    "location": {
+      "latitude": "30.2874",
+      "longitude": "-97.7478"
+    },
+    "address": "915 W 23rd St",
+    "property_type": "paid_parking",
+    "number_of_docks": "13",
+    "power_type": "solar",
+    "notes": "Kiosk ID and Footprint length & width to be revised.",
+    "council_district": "9",
+    "modified_date": "2021-11-04T14:15:00.000",
+    ":@computed_region_a3it_2a2z": "2860",
+    ":@computed_region_8spj_utxs": "9"
+  },
+  {
+    "kiosk_id": "1001",
+    "kiosk_name": "OFFICE/Main/Shop/Repair",
+    "kiosk_status": "closed",
+    "location": {
+      "latitude": "30.27186",
+      "longitude": "-97.73997"
+    },
+    "address": "1000 Brazos",
+    "property_type": " ",
+    "power_type": " ",
+    "notes": "This is the testing dock/station located at BSA's offices.  It is working, but unavailable to public access.",
+    "council_district": "1",
+    "modified_date": "2022-03-04T09:58:00.000",
+    ":@computed_region_a3it_2a2z": "2856",
+    ":@computed_region_8spj_utxs": "1"
+  },
+  {
+    "kiosk_id": "1002",
+    "kiosk_name": "6th & Navasota St.",
+    "kiosk_status": "closed",
+    "location": {
+      "latitude": "30.26383",
+      "longitude": "-97.72864"
+    },
+    "address": "1308 W. 6th St.",
+    "council_district": "3",
+    "modified_date": "2021-01-04T00:00:00.000",
+    ":@computed_region_a3it_2a2z": "2857",
+    ":@computed_region_8spj_utxs": "3"
+  },
+  {
+    "kiosk_id": "1003",
+    "kiosk_name": "8th & Guadalupe",
+    "kiosk_status": "closed",
+    "location": {
+      "latitude": "30.27106",
+      "longitude": "-97.74563"
+    },
+    "address": "800 Guadalupe St.",
+    "council_district": "9",
+    "modified_date": "2021-01-04T00:00:00.000",
+    ":@computed_region_a3it_2a2z": "2856",
+    ":@computed_region_8spj_utxs": "9"
+  },
+  {
+    "kiosk_id": "1004",
+    "kiosk_name": "Red River & LBJ Library",
+    "kiosk_status": "closed",
+    "location": {
+      "latitude": "30.2848",
+      "longitude": "-97.72756"
+    },
+    "address": "2322 Red River Street",
+    "council_district": "1",
+    "modified_date": "2021-01-04T00:00:00.000",
+    ":@computed_region_a3it_2a2z": "2860",
+    ":@computed_region_8spj_utxs": "1"
+  },
+  {
+    "kiosk_id": "2576",
+    "kiosk_name": "Rainey @ River St",
+    "kiosk_status": "closed",
+    "location": {
+      "latitude": "30.25802",
+      "longitude": "-97.7391"
+    },
+    "address": "64 Rainey St",
+    "council_district": "9",
+    "modified_date": "2021-01-04T00:00:00.000",
+    ":@computed_region_a3it_2a2z": "2856",
+    ":@computed_region_8spj_utxs": "9"
+  },
+  {
+    "kiosk_id": "1005",
+    "kiosk_name": "State Parking Garage @ Brazos & 18th",
+    "kiosk_status": "closed",
+    "location": {
+      "latitude": "30.27907",
+      "longitude": "-97.73715"
+    },
+    "address": "1789 Brazos St.",
+    "council_district": "1",
+    "modified_date": "2021-01-04T00:00:00.000",
+    ":@computed_region_a3it_2a2z": "2856",
+    ":@computed_region_8spj_utxs": "1"
+  },
+  {
+    "kiosk_id": "1006",
+    "kiosk_name": "Zilker Park West",
+    "kiosk_status": "closed",
+    "location": {
+      "latitude": "30.26587",
+      "longitude": "-97.76826"
+    },
+    "address": "Barton Springs Rd",
+    "council_district": "8",
+    "modified_date": "2021-01-04T00:00:00.000",
+    ":@computed_region_a3it_2a2z": "3260",
+    ":@computed_region_8spj_utxs": "8"
+  },
+  {
+    "kiosk_id": "1007",
+    "kiosk_name": "Lavaca & 6th",
+    "kiosk_status": "closed",
+    "location": {
+      "latitude": "30.26889",
+      "longitude": "-97.74525"
+    },
+    "address": "601 Lavaca St.",
+    "council_district": "9",
+    "modified_date": "2021-01-04T00:00:00.000",
+    ":@computed_region_a3it_2a2z": "2856",
+    ":@computed_region_8spj_utxs": "9"
+  },
+  {
+    "kiosk_id": "1008",
+    "kiosk_name": "Nueces @ 3rd",
+    "kiosk_status": "closed",
+    "location": {
+      "latitude": "30.26694",
+      "longitude": "-97.74939"
+    },
+    "address": "311 Nueces",
+    "council_district": "9",
+    "modified_date": "2021-01-04T00:00:00.000",
+    ":@computed_region_a3it_2a2z": "2856",
+    ":@computed_region_8spj_utxs": "9"
+  },
+  {
+    "kiosk_id": "1111",
+    "kiosk_name": "13th & Trinity",
+    "kiosk_status": "active",
+    "location": {
+      "latitude": "30.2741",
+      "longitude": "-97.73666"
+    },
+    "address": "910 Trinity Street",
+    "property_type": "sidewalk",
+    "number_of_docks": "13",
+    "power_type": "solar",
+    "notes": "The Kiosk ID and footprint length & width still need to be revised.",
+    "council_district": "1",
+    "modified_date": "2021-11-04T14:12:00.000",
+    ":@computed_region_a3it_2a2z": "2856",
+    ":@computed_region_8spj_utxs": "1"
+  }
+]
