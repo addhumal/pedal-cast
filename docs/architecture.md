@@ -101,9 +101,11 @@ The raw snapshot bucket is colocated with the dataset in the US, since a BigQuer
 
 **Target:** `trip_count` per `(zone_id, hour_ts)`.
 
-**Zones:** cluster stations into 10–30 zones (k-means on lat/lon, fit once, persisted). Per-station modeling is sparse and slow; citywide is too coarse to be interesting. Zone count chosen in Week 1 EDA and recorded here.
+**Zones:** **20** clusters, k-means on lat/lon, fit once, persisted as `data/zones.parquet` (`make fit-zones`). Per-station modeling is sparse and slow; citywide is too coarse to be interesting.
 
-> **Open (Week 1 finding):** `bigquery-public-data.austin_bikeshare.bikeshare_stations` carries no coordinates. Its columns are `station_id, name, status, address, alternate_name, city_asset_number, property_type, number_of_docks, power_type, footprint_length, footprint_width, notes, council_district, modified_date` — Google's loader drops the latitude and longitude present in the City of Austin source. So k-means on lat/lon needs a coordinate source that is not the BigQuery table. Candidates: snapshot the city's kiosk endpoint (`data.austintexas.gov/resource/qd73-bsdg.json`, ~100 rows, has `location.latitude`/`location.longitude`) into the repo or the raw bucket; or drop k-means and zone by `council_district`, which is already in the table but yields few, unbalanced zones. Decide before the zone step.
+**Zone count (Week 1 EDA, 2026-08-10):** silhouette over k ∈ [10, 30] on the City of Austin kiosk coordinates (~101 stations after dropping the office test dock). k=20 had the best silhouette on that full set (≈0.39); active-only peaked lower at k=12 but would leave closed historical stations unmapped. 20 stays inside the architecture band and matches the prior config default, now justified rather than guessed.
+
+**Coordinate source (Week 1 decision):** `bigquery-public-data.austin_bikeshare.bikeshare_stations` has no lat/lon — Google's loader drops them. Coordinates come from the City of Austin kiosk endpoint (`data.austintexas.gov/resource/qd73-bsdg.json`, `kiosk_id` ≡ `station_id`), snapshotted locally with `make snapshot-station-coords` so fitting does not need the live API. Station `1001` (`OFFICE/Main/Shop/Repair`) is excluded from the fit — it is Bike Share of Austin's own shop, not a public kiosk.
 
 **Features (v1):**
 - Lags: t-1h, t-24h, t-168h (same hour last week)

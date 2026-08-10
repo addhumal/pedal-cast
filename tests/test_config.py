@@ -18,7 +18,9 @@ def test_defaults_load() -> None:
     assert settings.source_stations_table == "bikeshare_stations"
     assert settings.holidays_country == "US"
     assert settings.t_now == datetime(2024, 5, 5, tzinfo=UTC)
-    assert 10 <= settings.zone_count <= 30
+    assert settings.zone_count == 20
+    assert "qd73-bsdg" in settings.station_coords_source
+    assert settings.zones_path.endswith("zones.parquet")
 
 
 def test_t_now_is_timezone_aware() -> None:

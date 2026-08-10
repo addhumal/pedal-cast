@@ -42,6 +42,14 @@ fmt: ## Apply formatting and safe lint fixes
 # ---------------------------------------------------------------------------
 # Data and training — local
 # ---------------------------------------------------------------------------
+.PHONY: snapshot-station-coords
+snapshot-station-coords: ## Fetch City of Austin kiosk lat/lon to data/ (Week 1)
+	uv run python -m src.data.station_coords --output data/station_coords.json
+
+.PHONY: fit-zones
+fit-zones: ## Fit k-means station→zone mapping and write data/zones.parquet (Week 1)
+	uv run python -m src.features.zones
+
 .PHONY: baselines
 baselines: ## Compute the seasonal-naive and t-24h baselines (Week 1)
 	uv run python -m src.train.baselines

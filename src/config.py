@@ -49,8 +49,14 @@ class Settings(BaseSettings):
     t_now: datetime = datetime(2024, 5, 5, tzinfo=UTC)
 
     # --- Features ----------------------------------------------------------
-    # 10-30 per docs/architecture.md §4; the real number comes from Week 1 EDA.
+    # Week 1 EDA (silhouette on City of Austin kiosk lat/lon): k=20 wins on the
+    # full coordinate set excluding the office test dock. See architecture §4.
     zone_count: int = Field(default=20, ge=10, le=30)
+    # Coordinates are not in BigQuery; this is the City of Austin kiosk endpoint
+    # (or a local snapshot path written by `make snapshot-station-coords`).
+    station_coords_source: str = "https://data.austintexas.gov/resource/qd73-bsdg.json?$limit=5000"
+    # Local path for the fitted station→zone mapping. Under /data so git ignores it.
+    zones_path: str = "data/zones.parquet"
 
     # --- Cost guardrail ----------------------------------------------------
     # Every BigQuery job carries this (docs/architecture.md §10.5).
